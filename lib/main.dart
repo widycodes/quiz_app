@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/quiz.dart';
+import 'package:flutter_complete_guide/result.dart';
 
 import './question.dart';
 import './answer.dart';
@@ -17,53 +19,43 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var questionIndex = 0;
+  var _questions = [
+    {
+      'questionText': 'What\'s your favorite color?',
+      'answers': ['Black', 'Red', 'Green', 'White'],
+    },
+    {
+      'questionText': 'What\'s your favorite animal?',
+      'answers': ['Rabbit', 'Snake', 'Elephant', 'Lion'],
+    },
+    {
+      'questionText': 'Who\'s your favorite instructor?',
+      'answers': ['Max', 'Weed', 'Widy', 'Codes'],
+    },
+  ];
 
-  void answerQuestion() {
+  var _questionIndex = 0;
+
+  void _answerQuestion() {
     setState(() {
-      questionIndex += 1;
+      _questionIndex += 1;
     });
-    print(questionIndex);
   }
 
   @override
   Widget build(BuildContext context) {
-    var questions = [
-      {
-        'questionText': 'What\'s your favorite color?',
-        'answers': ['Black', 'Red', 'Green', 'White'],
-      },
-      {
-        'questionText': 'What\'s your favorite animal?',
-        'answers': ['Rabbit', 'Snake', 'Elephant', 'Lion'],
-      },
-      {
-        'questionText': 'Who\'s your favorite instructor?',
-        'answers': ['Max', 'Weed', 'Widy', 'Codes'],
-      },
-    ];
     return MaterialApp(
       title: "Quiz App",
       home: Scaffold(
         appBar: AppBar(
           title: Text("Quiz App"),
         ),
-        body: questionIndex < questions.length
-            ? Column(
-                children: [
-                  Question(
-                    questions[questionIndex]['questionText'],
-                  ),
-                  // ignore: sdk_version_ui_as_code
-                  ...(questions[questionIndex]['answers'] as List<String>)
-                      .map((answer) {
-                    return Answer(answerQuestion, answer);
-                  }).toList()
-                ],
-              )
-            : Center(
-                child: Text("You did it"),
-              ),
+        body: _questionIndex < _questions.length
+            ? Quiz(
+                questions: _questions,
+                answerQuestion: _answerQuestion,
+                questionIndex: _questionIndex)
+            : Result(),
       ),
     );
   }
